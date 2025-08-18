@@ -1,0 +1,53 @@
+# AI Agent Configuration - Using Trend Micro RDSec AI Endpoint
+workflow_agent:
+  model: "gpt-4o"  # Using Trend Micro's gpt-4o model
+  max_tokens: 4096
+  temperature: 0.1
+  base_url: "https://api.rdsec.trendmicro.com/prod/aiendpoint/v1/"
+  
+  # Step-specific settings
+  steps:
+    requirements:
+      temperature: 0.2
+      max_tokens: 2048
+    design:
+      temperature: 0.1  
+      max_tokens: 4096
+    implementation:
+      temperature: 0.0
+      max_tokens: 4096
+    testing:
+      temperature: 0.1
+      max_tokens: 4096
+    documentation:
+      temperature: 0.2
+      max_tokens: 4096
+    notification:
+      temperature: 0.1
+      max_tokens: 1024
+
+# Knowledge Base Configuration - Using ChromaDB and Trend Micro's embedding model
+knowledge_base:
+  embedding_model: "text-embedding-3-large"  # Trend Micro's embedding model
+  vector_db: "chromadb"  # Local ChromaDB instead of Pinecone
+  chunk_size: 1000
+  chunk_overlap: 200
+  collection_name: "linux_windows_api_conversion"
+
+# Integration Settings
+integrations:
+  git:
+    default_branch: "main"
+    feature_branch_prefix: "feature/"
+    work_directory: "./workspace"
+    
+  teams:
+    webhook_url: ""
+    notification_channel: ""
+
+# Workflow Settings
+workflow:
+  sequential_execution: true
+  timeout_minutes: 60
+  retry_attempts: 3
+  step_timeout_minutes: 10
