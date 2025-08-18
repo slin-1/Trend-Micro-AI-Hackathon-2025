@@ -1,0 +1,47 @@
+Meeting Transcript - Cross-Platform Implementation Project
+Date: 2025-08-13
+Participants: PM, Tech Lead, Developer
+
+PM: Good morning everyone. We need to discuss porting our Linux stress test utility to Windows. Our enterprise customers are requesting equivalent functionality on Windows systems.
+
+Tech Lead: I've reviewed the existing Linux implementation at https://dsgithub.trendmicro.com/kien-do/ai-hackathon-2025-multiplatform-code. It's a comprehensive stress testing tool that creates users, groups, files with random content, changes ownership, and manages child processes using Linux system calls.
+
+Developer: The current Linux version performs several key operations:
+1. Creates and deletes user groups using system() calls to groupadd/groupdel
+2. Creates and deletes users using useradd/userdel commands
+3. File operations using open(), write(), close(), unlink()
+4. Changes file ownership using chown() with getpwnam() and getgrnam()
+5. Process management with fork(), pause(), and kill() with SIGKILL
+6. Uses POSIX-specific headers and functions throughout
+
+PM: Exactly. We need a Windows equivalent that provides the same stress testing functionality. The key requirements are:
+1. Port all Linux system calls to equivalent Windows APIs
+2. Maintain the same command-line interface and program flow
+3. Replace POSIX user/group management with Windows user/group APIs
+4. Convert file operations to Windows file handling
+5. Replace fork/kill process management with Windows process creation/termination
+6. Ensure the program compiles with MSVC or MinGW on Windows
+
+Tech Lead: The Windows implementation should use:
+- Windows API calls instead of Linux system calls
+- CreateFile() instead of open()
+- Windows user management APIs instead of useradd/groupadd
+- CreateProcess() instead of fork()
+- TerminateProcess() instead of kill()
+- Windows-specific headers like windows.h, userenv.h, etc.
+
+Developer: I'll need to research the equivalent Windows APIs for user/group management. The file operations should map fairly directly, but process management will require a different approach since Windows doesn't have fork().
+
+PM: Perfect. The target repository is https://dsgithub.trendmicro.com/kien-do/ai-hackathon-2025-multiplatform-code. Create a new branch called "windows-port-implementation" and implement stress_test_windows.c alongside the existing Linux version. Also update the Makefile to support both platforms.
+
+Tech Lead: Make sure to maintain the same error handling patterns and return codes. The Windows version should have the same command-line arguments: L (number of files), M (additional content bytes), N (initial file content length), and num_processes (child processes to create).
+
+Developer: I'll implement comprehensive unit tests to ensure the Windows version works correctly. The tests should verify file creation, user management, and process handling on Windows.
+
+PM: Excellent. This cross-platform support will significantly expand our market reach. Let's target completion by end of sprint.
+
+Tech Lead: I'll create the technical design document outlining the Windows API mappings and implementation approach.
+
+PM: Great. Also ensure we have proper documentation for building and running on Windows, similar to our Linux instructions.
+
+Meeting adjourned.

@@ -1,0 +1,1 @@
+# Knowledge base indexer for processing codebases, Confluence pages, and wikis
